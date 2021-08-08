@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": false,
+    "target": "es2020",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "outFile": "./built/app.js"
+  },
+  "files": [ "HelperFunctions.ts", "DialogRepresentation.ts", "DialogView.ts", "Application.ts" ]
+}
