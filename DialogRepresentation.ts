@@ -10,9 +10,9 @@ class Edge {
 }
 
 abstract class Question {
-    name: string;
-    question: string;
-    options: Array<Edge>;
+    readonly name: string;
+    readonly question: string;
+    readonly options: Array<Edge>;
 
     constructor(n: string, q: string, o: Array<Edge>) {
         this.name = n;
@@ -50,8 +50,8 @@ class OptionsQ extends Question {
 }
 
 class IntQ extends Question {
-    min: number;
-    max: number;
+    readonly min: number;
+    readonly max: number;
     constructor(n: string, q: string, o: Array<Edge>, min:number, max:number) {
         super(n, q, o);
         this.min = min;
@@ -74,15 +74,94 @@ class IntQ extends Question {
     GetType(): string { return "Integer question"; }
 }
 
-class DialogGraph {
-    b: string = "ahoj svete, model DialogGraph se hlasi do sluzby";
-    constructor() {
-        console.log(this.b);
+class EmailQ extends Question {
+    constructor(n: string, q: string, o: Array<Edge>) {
+        super(n, q, o);
+    }
+
+    IsAnswerValid(answer: string): boolean {
+        return true;
+    }
+
+    GetNextQuestion(answer: string): string {
+        return this.options[0].to;
+    }
+
+    GetType(): string { return "Email question"; }
+}
+
+class BoundaryVertex extends Question {
+    constructor(n:string, o:Array<Edge> = []) {
+        super(n, n, o );
+    }
+
+    IsAnswerValid(answer: string): boolean {
+        return (this.name == "START");
+    }
+
+    GetNextQuestion(): string {
+        if (this.name == "START") 
+            return this.options[0].to;
+        return "Critical error, END may not continue anywhere.";
+    }
+
+    GetType(): string {
+        return "Boundary vertex question";
+    }
+}
+
+class Answer {
+    readonly question: string;
+    readonly answer: string;
+    readonly type: string;
+    readonly name: string;
+    constructor(q: string, a: string, t: string, n: string) {
+        this.question = q; this.answer = a; this.type = t; this.name = n;
+    }
+
+    ToString(): string { return `${this.question} ${this.answer}`;}
+}
+
+enum State { UNDISCOVERED, OPENED, CLOSED };
+
+interface IDialog {
+    GetQuestion(): Question;
+    SetAnswer(answer: string): boolean;
+    Reverse(): void;
+    IsGraphValid(): boolean;
+    GetChatHistory(): Array<Answer>;
+}
+
+class CustomDefinedError extends Error {
+    constructor(error: string) {
+        super(error);
+    }
+}
+
+class DialogGraph implements IDialog {
+    private questions: Map<string, Question>;
+    private chatHistory: Array<Answer>;
+    private currentQuestion: Question;
+
+    private DFSstates: Map<string, State>;
+    private CollectionQ: Array<Question>;
+
+    constructor( inputQuestions: Array<Question>) {
+        this.questions = new Map<string, Question>();
+        for (let q of inputQuestions)
+            this.questions.set(q.name, q);
+
+        this.chatHistory = new Array<Answer>();
+        this.questions.set("START", new BoundaryVertex("START",  ));
+
     }
 
     SetAnswer(answer: string): boolean {
         console.log(`Dialog model is setting the answer to: ${answer}`);
         return false;
     }
+
+   
+
 }
 
