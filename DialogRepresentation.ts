@@ -3,7 +3,7 @@ class Edge {
     readonly name: string;
     readonly to: string;
     
-    constructor(to: string, n: string = "NOT SET") {
+    constructor(n: string, to: string ) {
         this.name = n;
         this.to = to;
     }
@@ -149,8 +149,8 @@ class DialogGraph implements IDialog {
             this.questions.set(q.name, q);
 
         this.chatHistory = new Array<Answer>();
-        this.questions.set("START", new BoundaryVertex("START", [ new Edge(inputQuestions[0].name) ] ));
-        this.questions.set("END", new BoundaryVertex("END"));
+        this.questions.set("START", new BoundaryVertex("START", new Array<Edge>( new Edge(inputQuestions[0].name, inputQuestions[0].name) )  ));
+        this.questions.set("END", new BoundaryVertex("END") );
 
         this.currentQuestion = inputQuestions[0];
         
@@ -173,7 +173,7 @@ class DialogGraph implements IDialog {
     }
 
     Reverse(): void {
-        let lastAnswer: Answer = this.chatHistory.shift();
+        let lastAnswer: Answer = this.chatHistory.pop();
         this.currentQuestion = this.questions.get( lastAnswer.name );
     }
 
@@ -226,10 +226,13 @@ class DialogGraph implements IDialog {
         if ( this.questions.get("END").options.length != 0 )
             return this.ConsoleTrue("END vertex must not have any out edges!");
 
+        console.log("passed 1");
+
         for (let e of this.questions.get("START").options)
             if (e.to == "END")
                 return this.ConsoleTrue("Question START has edge pointing to END. I believe that will not work as a nonempty dialog. 😞😞");
 
+        console.log("passed 2");
         let endNOTReachable: boolean = true;
         for (let q of this.CollectionQ()) {
             for (let e of q.options) {
@@ -248,9 +251,15 @@ class DialogGraph implements IDialog {
             }
             if (q.name != "END" && q.options.length == 0) 
                 return this.ConsoleTrue(`Question ${q.name} has no out edges and thus leads to nowhere! 🤭🤭`);
+
+
         }
+
+        console.log("passed 4");
         if (endNOTReachable) 
             return this.ConsoleTrue("I did not find any edges pointing to END. 🤷🤷");
+
+        console.log("passed 5");
 
         return false;
     }

@@ -20,7 +20,7 @@
 					</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="tableBody">
 				<tr>
 					<td id="stringBoxA">
 						<button id="moznostA" type="button" class="btn green">Eshop</button>
@@ -36,12 +36,15 @@
 					</td>
 
 					<td id="emailBox">
-						<input id="email" type="email" maxlength="200" placeholder="email" />
+						<input id="email" type="email" maxlength="200" placeholder="Email" />
+						<input id="number" type="tel" pattern="[0-9]{3}[ -]{0,1}[0-9]{3}[ -]{0,1}[0-9]{3}" placeholder="Telefonni cislo" >
 						<button id="enterEmail" type="button" class="btn green">Uloz</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
+
+		<button id="reverseAnswer" type="button" class="btn yellow">Beru zpet</button>
 	</div>
 
 </body>

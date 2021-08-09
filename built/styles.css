@@ -8,9 +8,9 @@ body {
 
     display: grid;
     grid-template-columns:
-    300px auto 300px;
-    grid-template-rows:
     200px auto 200px;
+    grid-template-rows:
+    100px auto 100px;
     grid-template-areas:
     "header header header"
     "leftside main rightside"
@@ -22,11 +22,23 @@ body {
     -webkit-user-drag: none;
 }
 
+#int{
+    margin-right: 20px;
+}
+
+#reverseAnswer {
+    margin-top: 50px;
+    margin-left: 250px;
+}
+
+#email {
+    margin-right: 20px;
+}
+
 #nadpis {
     grid-area: header;
     text-align: center;
     margin: auto;
-    
 }
 
 #table-container {
