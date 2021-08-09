@@ -26,42 +26,6 @@ body {
     -webkit-app-region: no-drag;
 }
 
-
-#Add_error {
-    color: #fff;
-    font-size: 26px;
-    background-color: rgba(48, 155, 255,0.3 );
-    grid-area: leftside;
-}
-
-#table_mazaci {
-    grid-area: rightside;
-}
-
-.mazaci_btn {
-    width: 200px;
-    height: 40px;
-    margin-left: 40px;
-    margin-top: 60px;
-    font-size: 20px;
-    line-height: 30px;
-}
-
-    .mazaci_btn:hover {
-        cursor: pointer;
-    }
-
-.check {
-    width: 20px;
-    height: 20px;
-}
-
-p {
-    color: #ffffff;
-    font-size: 30px;
-    background-color: #141a25;
-}
-
 #nadpis {
     grid-area: header;
     text-align: center;
@@ -73,82 +37,16 @@ p {
     grid-area: main;
 }
 
-#addContainer {
-    grid-area: add;
-    display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: 60px 80px 80px 40px;
-    grid-template-areas:
-        "pridej"
-        "polozka"
-        "mnozstvi"
-        "potvrd";
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9) 10%, rgba(255, 255, 255, 0.99), rgba(255, 255, 255, 0.9) 90%, rgba(255, 255, 255, 0.8));
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-}
-
-
-#div_pridej {
-    grid-area: pridej;
-}
-
-#text_pridej {
-    text-align: center;
-}
-
-#div_polozka {
-    grid-area: polozka;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-    text-indent: 15px;
-}
-
-#text_polozka {
-    line-height: 40px;
-    font-size: 24px;
-    width: 50%;
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-#div_mnozstvi {
-    grid-area: mnozstvi;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-}
-
-#text_mnozstvi {
-    line-height: 40px;
-    font-size: 24px;
-    width: 25%;
-    text-align: center;
-    margin-top: 15px;
-    margin-bottom: 20px;
-}
-
-#div_potvrd {
-    grid-area: potvrd;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-}
 
 .green {
     background-color: #28a745;
     border-color: #28a745;
 }
 
-    .green:hover {
-        background-color: #48c765;
-        border-color: #48c765;
-    }
+.green:hover {
+    background-color: #48c765;
+    border-color: #48c765;
+}
 
 .blue {
     color: #fff;
@@ -156,20 +54,20 @@ p {
     border-color: #007bff;
 }
 
-    .blue:hover {
-        background-color: #309bff;
-        border-color: #309bff;
-    }
+.blue:hover {
+    background-color: #309bff;
+    border-color: #309bff;
+}
 
 .yellow {
     background-color: #ffc107;
     border-color: #ffc107;
 }
 
-    .yellow:hover {
-        background-color: #ffde27;
-        border-color: #ffde27;
-    }
+.yellow:hover {
+    background-color: #ffde27;
+    border-color: #ffde27;
+}
 
 .red {
     color: #fff;
@@ -177,24 +75,22 @@ p {
     border-color: #dc3545;
 }
 
-    .red:hover {
-        background-color: #ec6575;
-        border-color: #fc6575;
-    }
+.red:hover {
+    background-color: #ec6575;
+    border-color: #fc6575;
+}
 
 .gray, .gray:hover {
     background-color: #555555;
     border-color: #555555;
 }
 
-.rowRemoval, .rowRemoval:hover {
-    background-color: rgba(0, 0, 0, 0.7) !important;
-    border-color: rgba(0, 0, 0, 0.7) !important;
-    z-index: 10;
-}
-
 .invisible {
     visibility: hidden;
+}
+
+.notDisplayed {
+    display: none;
 }
 
 input[type=number] {
@@ -215,9 +111,9 @@ input[type=number] {
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-    .btn:hover {
-        cursor: pointer;
-    }
+.btn:hover {
+    cursor: pointer;
+}
 
 .table-fill {
     table-layout: fixed;
@@ -230,22 +126,6 @@ input[type=number] {
     animation: float 5s infinite;
 
 }
-/*
-#col_poradi {
-    width: 30px;
-}
-
-#col_polozka {
-    min-width: 300px;
-}
-
-#col_mnozstvi {
-    width: 140px;
-}
-
-#col_akce {
-    width: 280px;
-}*/
 
 th {
     color: #D5DDE5;
@@ -261,14 +141,14 @@ th {
     vertical-align: middle;
 }
 
-    th:first-child {
-        border-top-left-radius: 3px;
-    }
+th:first-child {
+    border-top-left-radius: 3px;
+}
 
-    th:last-child {
-        border-top-right-radius: 3px;
-        border-right: none;
-    }
+th:last-child {
+    border-top-right-radius: 3px;
+    border-right: none;
+}
 
 tr {
     border-top: 1px solid #C1C3D1;
@@ -280,36 +160,36 @@ tr {
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.1);
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9) 10%, rgba(255, 255, 255, 0.99), rgba(255, 255, 255, 0.9) 90%, rgba(255, 255, 255, 0.8));
 }
-    /*
-    tr:hover td {
-        background: #4E5066;
-        color: #FFFFFF;
-        border-top: 1px solid #22262e;
-    }*/
+/*
+tr:hover td {
+    background: #4E5066;
+    color: #FFFFFF;
+    border-top: 1px solid #22262e;
+}*/
     
-    tr:first-child {
-        border-top: none;
-    }
+tr:first-child {
+    border-top: none;
+}
 
-    tr:last-child {
-        border-bottom: none;
-    }
+tr:last-child {
+    border-bottom: none;
+}
 
-    tr:nth-child(odd) td {
-        background: rgba(0, 0, 0, 0.1);
-    }
-    /*
-    tr:nth-child(odd):hover td {
-        background: #4E5066;
-    }*/
+tr:nth-child(odd) td {
+    background: rgba(0, 0, 0, 0.1);
+}
+/*
+tr:nth-child(odd):hover td {
+    background: #4E5066;
+}*/
 
-    tr:last-child td:first-child {
-        border-bottom-left-radius: 3px;
-    }
+tr:last-child td:first-child {
+    border-bottom-left-radius: 3px;
+}
 
-    tr:last-child td:last-child {
-        border-bottom-right-radius: 3px;
-    }
+tr:last-child td:last-child {
+    border-bottom-right-radius: 3px;
+}
 
 td {
     padding-left: 25px;
@@ -323,49 +203,16 @@ td {
     border-right: 1px solid #C1C3D1;
 }
 
-    td:last-child {
-        border-right: 0px;
-    }
-
-    td.text-center {
-        text-align: center;
-        margin: 0;
-        padding: 0;
-    }
-
-    td.text-right {
-        text-align: right;
-    }
-
-progress {
-    width: 125px;
-    height: 12px;
-    border-radius: 10px;
-    border: 0; /* for IE */
-    background-color: white;
-    border: 1px solid #007bff;
-    overflow: hidden;
+td:last-child {
+    border-right: 0px;
 }
 
-::-webkit-progress-bar { /* necessary to style the progress bar background */
-    background-color: white;
+td.text-center {
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
-.animated::-webkit-progress-value {
-    transition: width 3s;
-    background-color: #007bff;
+td.text-right {
+    text-align: right;
 }
-
-.animated::-moz-progress-bar {
-    transition: padding-bottom 1s;
-    padding-left: 60px;
-    padding-bottom: var(--value);
-    background-color: #007bff;
-    height: 0;
-    transform-origin: 0 0;
-    transform: rotate(-90deg) translateX(-60px);
-}
-
-.animated::-ms-fill {
-    background-color: #007bff;
-    border: 0;
