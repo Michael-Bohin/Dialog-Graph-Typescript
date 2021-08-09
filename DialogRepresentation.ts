@@ -1,4 +1,4 @@
-
+﻿
 class Edge {
     readonly name: string;
     readonly to: string;
@@ -128,8 +128,8 @@ interface IDialog {
     GetQuestion(): Question;
     SetAnswer(answer: string): boolean;
     Reverse(): void;
-    IsGraphValid(): boolean;
     GetChatHistory(): Array<Answer>;
+    IsGraphValid(): boolean;
 }
 
 class CustomDefinedError extends Error {
@@ -143,25 +143,155 @@ class DialogGraph implements IDialog {
     private chatHistory: Array<Answer>;
     private currentQuestion: Question;
 
-    private DFSstates: Map<string, State>;
-    private CollectionQ: Array<Question>;
-
     constructor( inputQuestions: Array<Question>) {
         this.questions = new Map<string, Question>();
         for (let q of inputQuestions)
             this.questions.set(q.name, q);
 
         this.chatHistory = new Array<Answer>();
-        this.questions.set("START", new BoundaryVertex("START",  ));
+        this.questions.set("START", new BoundaryVertex("START", [ new Edge(inputQuestions[0].name) ] ));
+        this.questions.set("END", new BoundaryVertex("END"));
 
+        this.currentQuestion = inputQuestions[0];
+        
+        if (this.GraphIsInvalid())
+            throw new CustomDefinedError("Input DialogGraph is not valid.");
     }
 
+    GetQuestion(): Question { return this.currentQuestion; }
+
     SetAnswer(answer: string): boolean {
-        console.log(`Dialog model is setting the answer to: ${answer}`);
+        let Q : Question = this.GetQuestion();
+        if (/*negace>>*/!/*<<*/ Q.IsAnswerValid(answer))
+            return false;
+
+        let a: Answer = new Answer( Q.question, answer, Q.GetType(), Q.name);
+        this.chatHistory.push(a);
+
+        this.currentQuestion = this.questions.get( Q.GetNextQuestion(answer) );
+        return true;
+    }
+
+    Reverse(): void {
+        let lastAnswer: Answer = this.chatHistory.shift();
+        this.currentQuestion = this.questions.get( lastAnswer.name );
+    }
+
+    GetChatHistory(): Array<Answer> { return this.chatHistory; }
+
+    IsGraphValid(): boolean { return !this.GraphIsInvalid(); }
+
+    // Datafields required for Graph validity checks: (foreach question and vertice states of DFS )
+    private DFSstates: Map<string, State>;
+
+    private CollectionQ(): Array<Question> { // Javascript doesnt support yield return in the same way C# does
+        let result: Array<Question> = new Array<Question>();
+        for (let q of this.questions.values())
+            result.push(q);
+        return result; // solve this in future: 1. How to write generators in js/ts ? 2. How to create copies with new constant instances? 
+    }
+
+    GraphIsInvalid():boolean {
+        if ( this.NotUniqueNames_ReservedNamesViolation() ) {
+            console.log("Critical error, input questions either do not have unique names or they violate reserved 'START' or 'END'. ");
+            return true;
+        }
+
+        if ( this.EdgesAreInvalid() ) {
+            console.log("Critical error, input questions do not contain legit edges.");
+            return true;
+        }
+
+        if ( this.GraphContainsCycle() ) {
+            console.log("Graph contains cycle. :(");
+            return true;
+        }
+
         return false;
     }
 
-   
+    private NotUniqueNames_ReservedNamesViolation(): boolean {
+        let memory: Set<string> = new Set<string>();
+        for (let q of this.CollectionQ()) {
+            console.log("Control log " + q);
+            if (memory.has(q.name))
+                return true; // duplicate names of questions
+            // rewrite this logic in future, current architecture disallows checking it here 
+            memory.add(q.name);
+        }
+        return false;
+    }
 
+    private EdgesAreInvalid(): boolean {
+        if ( this.questions.get("END").options.length != 0 )
+            return this.ConsoleTrue("END vertex must not have any out edges!");
+
+        for (let e of this.questions.get("START").options)
+            if (e.to == "END")
+                return this.ConsoleTrue("Question START has edge pointing to END. I believe that will not work as a nonempty dialog. 😞😞");
+
+        let endNOTReachable: boolean = true;
+        for (let q of this.CollectionQ()) {
+            for (let e of q.options) {
+                let to: string = e.to;
+                if ( !this.questions.has(to) ) 
+                    return this.ConsoleTrue(`There is an edge that is pointing to question: ${to}. But guess what. That question does not exist. 😂😂` );
+
+                if (to == "START")
+                    return this.ConsoleTrue("Some edge is pointing to 'START' 😜😜");
+
+                if (to == q.name)
+                    return this.ConsoleTrue(`Question with the name: '${q.name}' has edge that is pointing to the same question. 🤦🤦`);
+
+                if (to == "END")
+                    endNOTReachable = false;
+            }
+            if (q.name != "END" && q.options.length == 0) 
+                return this.ConsoleTrue(`Question ${q.name} has no out edges and thus leads to nowhere! 🤭🤭`);
+        }
+        if (endNOTReachable) 
+            return this.ConsoleTrue("I did not find any edges pointing to END. 🤷🤷");
+
+        return false;
+    }
+
+    private ConsoleTrue(errorMessage: string): boolean {
+        console.log(errorMessage);
+        return true;
+    }
+
+    private GraphContainsCycle(): boolean {
+        this.DFSstates = new Map<string, State>();
+        for (let q of this.CollectionQ())
+            this.DFSstates.set(q.name, State.UNDISCOVERED);
+
+        while (true) {
+            let v: string = null;
+            for (let q of this.DFSstates.keys()) // this is not right -> making it O(n^2) -> fix it! 
+                if (this.DFSstates.get(q) == State.UNDISCOVERED) {
+                    v = q;
+                    break;
+                }
+            if (v == null)
+                break;
+
+            if (this.DFS(v))
+                return this.ConsoleTrue("Graph contains cycle. :(");
+        }
+        return false; // graph is acyclic :) 
+    }
+
+    private DFS(v: string) {
+        this.DFSstates.set(v, State.OPENED);
+        for (let e of this.questions.get(v).options) {
+            let w: string = e.to;
+            let stateOfW: State = this.DFSstates.get(w);
+            if ( stateOfW == State.OPENED)
+                return true; // cycle detected
+            if ( stateOfW == State.UNDISCOVERED && this.DFS(w) )
+                return true; // je-li vrchol neobjeveny a na nem zavoalan rekurze objevila cyklus, vrat pravda
+        }
+        this.DFSstates.set(v, State.CLOSED);
+        return false; // no cycle detected
+    }
 }
-
