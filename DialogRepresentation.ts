@@ -66,9 +66,7 @@ class IntQ extends Question {
     }
 
     GetNextQuestion(answer: string): string {
-        // assumes next question is at index 0 of options
-        // int future implement int question ahving multiple options 
-        return this.options[0].to;
+        return this.options[0].to; // assumes next question is at index 0 of options in future implement int question having multiple options 
     }
 
     GetType(): string { return "Integer question"; }
@@ -79,8 +77,11 @@ class EmailQ extends Question {
         super(n, q, o);
     }
 
-    IsAnswerValid(answer: string): boolean {
-        return true;
+    IsAnswerValid(userInput: string): boolean {
+        // RegularExpression for emails: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+        const pattern: RegExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+        const regex = new RegExp(pattern);
+        return regex.test(userInput);
     }
 
     GetNextQuestion(answer: string): string {
@@ -88,6 +89,27 @@ class EmailQ extends Question {
     }
 
     GetType(): string { return "Email question"; }
+}
+
+class TelephoneQ extends Question {
+    constructor(n: string, q: string, o: Array<Edge>) {
+        super(n, q, o);
+    }
+
+    public IsAnswerValid(userInput: string): boolean {
+        // Regular expression for telephone numbers: /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/
+        const pattern: RegExp = /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/;
+        const regex = new RegExp(pattern);
+        console.log("Valid tel evaluation of input: '", userInput , "' is: ", regex.test(userInput));
+        return regex.test(userInput);
+    }
+
+    GetNextQuestion(answer: string): string {
+        return this.options[0].to;
+    }
+
+    GetType(): string { return "Telephone question"; }
+
 }
 
 class BoundaryVertex extends Question {
@@ -127,6 +149,7 @@ enum State { UNDISCOVERED, OPENED, CLOSED };
 interface IDialog {
     GetQuestion(): Question;
     SetAnswer(answer: string): boolean;
+    ValidInput(answer: string, questionName: string): boolean;
     Reverse(): void;
     GetChatHistory(): Array<Answer>;
     IsGraphValid(): boolean;
@@ -170,6 +193,11 @@ class DialogGraph implements IDialog {
 
         this.currentQuestion = this.questions.get( Q.GetNextQuestion(answer) );
         return true;
+    }
+
+    ValidInput(answer: string, questionName: string): boolean {
+        let question: Question = this.questions.get(questionName);
+        return question.IsAnswerValid(answer);
     }
 
     Reverse(): void {

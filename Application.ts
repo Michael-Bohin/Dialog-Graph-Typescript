@@ -7,7 +7,8 @@ window.addEventListener('DOMContentLoaded', (ev) => {
         new IntQ("KolikSEA", "Kolike SEA chces?",                           new Array<Edge> ( new Edge("Fotky", "Fotky") )       , 1, 1_000_000),
         new OptionsQ("Fotky", "Chces fotky?",                               new Array<Edge> ( new Edge("Ano", "KolikFotek"),        new Edge("Ne", "DejMiEmail") )),
         new IntQ("KolikFotek", "Kolik fotek na web pridame?",               new Array<Edge> ( new Edge("DejMiEmail", "DejMiEmail") )  , 1, 1_000_000),
-        new EmailQ("DejMiEmail", "Jaky je tvuj email a telefonni cislo?",   new Array<Edge> ( new Edge("END", "END") ))
+        new EmailQ("DejMiEmail", "Jaky je tvuj email a telefonni cislo?",   new Array<Edge> ( new Edge("DejMiTel", "DejMiTel") ) ),
+        new TelephoneQ("DejMiTel", "Jaky je tvuj email a telefoni cislo?",  new Array<Edge> ( new Edge("END", "END")))
     );
     console.log(questions);
     let model: DialogGraph = new DialogGraph(questions);
@@ -19,26 +20,22 @@ window.addEventListener('DOMContentLoaded', (ev) => {
 function placeEventListeners( view : DialogPublicView) {
     getEl("moznostA").addEventListener("click", () => {
         let answer: string = getEl("moznostA").innerText;
-        view.SetAnswer(answer);
+        view.SetAnswer(answer, "moznostA");
     });
 
     getEl("moznostB").addEventListener("click", () => {
         let answer: string = getEl("moznostB").innerText;
-        view.SetAnswer(answer);
+        view.SetAnswer(answer, "moznostB");
     });
 
     getEl("enterInt").addEventListener("click", () => {
-        const inputElement = <HTMLInputElement> getEl("int");
-        let answer: string = inputElement.value;
-        view.SetAnswer( answer );
+        let answer: string = (<HTMLInputElement>getEl("int")).value;
+        view.SetAnswer( answer, "int" );
     });
 
     getEl("enterEmail").addEventListener("click", () => {
-        const inputElement = <HTMLInputElement>getEl("email");
-        let email: string = inputElement.value;
-
-        const inputElementTel = <HTMLInputElement>getEl("tel");
-        let number: string = inputElementTel.value;
+        const email: string = (<HTMLInputElement>getEl("email")).value;
+        const number: string = (<HTMLInputElement>getEl("tel")).value;
         view.SetEmailAndTelephone( email, number );
     });
 
@@ -47,7 +44,4 @@ function placeEventListeners( view : DialogPublicView) {
     getEl("email").addEventListener("input", () => { view.UpdateEmailValidation(); } );
 
     getEl("tel").addEventListener("input", () => { view.UpdateTelValidation(); } );
-    //getEl("email").oninput = () => {  } ;
-    //getEl("tel").oninput = () => { view.ValidateTel("tel");
-    // alse add button for reversing chatHistory here
 }

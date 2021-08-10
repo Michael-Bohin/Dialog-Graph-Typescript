@@ -1,14 +1,24 @@
-class DialogPublicView {
+interface IPublicView {
+    SetAnswer(answer: string, id: string) : void; // all except email and telephone (gets individual validation)
+    Reverse(): void;
+    UpdateEmailValidation(): void;
+    UpdateTelValidation(): void;
+    SetEmailAndTelephone(email:string, number:string): void;
+}
+
+class DialogPublicView implements IPublicView {
     dialogGraph: DialogGraph;
     constructor(dg: DialogGraph) {
         this.dialogGraph = dg;
         this.Redraw();
     }
 
-    SetAnswer(answer: string): void {
-        if (this.dialogGraph.SetAnswer(answer))
-            // answer was correct, current question has been updated as well as chatHistory -> redraw page
-            this.Redraw();
+    public SetAnswer(answer: string, id: string): void {
+        if (this.dialogGraph.SetAnswer(answer)) {
+            this.Redraw(); // answer was correct, current question has been updated as well as chatHistory -> redraw page
+        } else {
+            this.Warning(id);
+        }
     }
 
     private Redraw(): void {
@@ -98,53 +108,33 @@ class DialogPublicView {
     }
 
     public UpdateEmailValidation(): void {
-        console.log("Email Validation says: ");
         let val:string = (<HTMLInputElement>getEl("email")).value;
-        console.log( val );
 
-        if (this.ValidEmail(val)) {
+        if ( this.dialogGraph.ValidInput(val, "DejMiEmail") ) {
             getEl("markEmail").classList.remove("invisible");
         } else {
             getEl("markEmail").classList.add("invisible");
         }
     }
 
-    // RegularExpression for emails: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-    private ValidEmail(userInput: string): boolean {
-        const pattern: RegExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-        const regex = new RegExp(pattern);
-        return regex.test( userInput);
-    }
-
     public UpdateTelValidation(): void {
-        console.log("Telephone Validation says: ");
         let val: string = (<HTMLInputElement>getEl("tel")).value;
-        console.log( val );
 
-        if (this.ValidTel(val)) {
+        if (this.dialogGraph.ValidInput(val, "DejMiTel")) {
             getEl("markTel").classList.remove("invisible");
         } else {
             getEl("markTel").classList.add("invisible");
         }
     }
 
-    // Regular expression for telephone numbers: /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/
-    private ValidTel(userInput: string): boolean {
-
-        console.log("Valid tel recieved: ", userInput);
-        const pattern: RegExp = /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/;
-        const regex = new RegExp(pattern);
-        console.log("Valid tel evaluation is: ", regex.test(userInput));
-        return regex.test(userInput);
-    }
-
-    public SetEmailAndTelephone(email: string, number: string) {
-        let legitEmail: boolean = this.ValidEmail( email );
-        let legitNumber: boolean = this.ValidTel(number);
+    public SetEmailAndTelephone(email: string, number: string):void {
+        let legitEmail: boolean = this.dialogGraph.ValidInput(email, "DejMiEmail");
+        let legitNumber: boolean = this.dialogGraph.ValidInput(number, "DejMiTel");
 
         if (legitEmail && legitNumber) {
             console.log("Everythin is alrgiht!");
-            this.dialogGraph.SetAnswer(email); // later set answer number after this line 
+            this.dialogGraph.SetAnswer(email); 
+            this.dialogGraph.SetAnswer(number);
             this.Redraw();
         } else if (legitEmail) {
             console.log("Number is not legit!");
