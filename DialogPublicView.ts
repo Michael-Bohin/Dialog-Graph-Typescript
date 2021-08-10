@@ -21,7 +21,7 @@ class DialogPublicView implements IPublicView {
         }
     }
 
-    private Redraw(): void {
+    protected Redraw(): void {
         // implement drawing of all UI components:
         // check what type of question is currently active, depending on that display none the other controls, set inline to the one active.
         // for string options question, set correct inner text of buttons
@@ -57,7 +57,7 @@ class DialogPublicView implements IPublicView {
     // intBox
     // emailBox
 
-    private HideNotActiveControls(type: string) {
+    protected HideNotActiveControls(type: string) {
         //this.hideAll(["stringBoxA", "stringBoxB", "intBox", "emailBox"]);
         if (type == "Options question") {
             getEl("stringBoxA").style.display = "table-cell";
@@ -81,7 +81,7 @@ class DialogPublicView implements IPublicView {
         }
     }
 
-    private DisplaySummary() : void {
+    protected DisplaySummary() : void {
         console.log("Displaying summary: ");
         getEl("nadpis").innerText = "Dekujeme za zajem. Na Vasi poptavku se podivame a napiseme Vam email s nabidkou.";
         getEl("tableBody").innerText = "";
@@ -90,7 +90,7 @@ class DialogPublicView implements IPublicView {
             this.AddAnswerToTable(answer);
     }
 
-    private AddAnswerToTable( answer : Answer): void {
+    protected AddAnswerToTable( answer : Answer): void {
         let tableRow: HTMLElement = document.createElement("tr");
         let leftTableData: HTMLElement = document.createElement("td");
         let rightTableData: HTMLElement = document.createElement("td");
@@ -149,7 +149,7 @@ class DialogPublicView implements IPublicView {
         }
     }
 
-    private Warning(id: string): void {
+    protected Warning(id: string): void {
         getEl(id).style.backgroundColor = "rgb(160, 30, 30)";
         setTimeout(() => {
             getEl(id).style.backgroundColor = "rgb(255, 255, 255)";

@@ -27,8 +27,9 @@ body {
 }
 
 #reverseAnswer {
-    margin-top: 50px;
-    margin-left: 250px;
+    position:absolute;
+    margin-top: 20px;
+    margin-left: 400px;
 }
 
 #email {

@@ -134,25 +134,29 @@ class BoundaryVertex extends Question {
 
 class Answer {
     readonly question: string;
-    readonly answer: string;
+    answer: string;
     readonly type: string;
     readonly name: string;
     constructor(q: string, a: string, t: string, n: string) {
         this.question = q; this.answer = a; this.type = t; this.name = n;
     }
 
-    ToString(): string { return `${this.question} ${this.answer}`;}
+    ToString(): string { return `${this.question} ${this.answer}`; }
+
+    ChangeAnswer(newAnswer: string) { this.answer = newAnswer; }
 }
 
 enum State { UNDISCOVERED, OPENED, CLOSED };
 
 interface IDialog {
     GetQuestion(): Question;
+    GetAllQuestions(): Array<Question>;
     SetAnswer(answer: string): boolean;
     ValidInput(answer: string, questionName: string): boolean;
     Reverse(): void;
     GetChatHistory(): Array<Answer>;
     IsGraphValid(): boolean;
+    
 }
 
 class CustomDefinedError extends Error {
@@ -182,6 +186,13 @@ class DialogGraph implements IDialog {
     }
 
     GetQuestion(): Question { return this.currentQuestion; }
+
+    GetAllQuestions(): Array<Question> {
+        let result: Array<Question> = new Array<Question>();
+        for (let q of this.questions.values())
+            result.push(q);
+        return result;
+    }
 
     SetAnswer(answer: string): boolean {
         let Q : Question = this.GetQuestion();
@@ -330,5 +341,30 @@ class DialogGraph implements IDialog {
         }
         this.DFSstates.set(v, State.CLOSED);
         return false; // no cycle detected
+    }
+
+    // Methods meant to be listening to DialogInternalView (improve architecture design, this should not have happened)
+    public ChatHistoryContains(questionName: string): boolean {
+        for (let a of this.chatHistory)
+            if (a.name == questionName)
+                return true;
+        return false;
+    }
+
+    public ChatHistoryAnswer(questionName: string): string {
+        for (let a of this.chatHistory)
+            if (a.name == questionName)
+                return a.answer;
+        return "Critical error: runtime should never come here.";
+    }
+
+    public UnsafeChangeAnswer(newAnswer: string, questionName: string) {
+        console.log("Unsage change answer with values: ", newAnswer, " ", questionName );
+        for (let answer of this.chatHistory)
+            if (questionName == answer.name) {
+                console.log("Did I get here?")
+                answer.ChangeAnswer(newAnswer);
+            }
+                
     }
 }

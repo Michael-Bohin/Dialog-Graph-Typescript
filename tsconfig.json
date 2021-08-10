@@ -1,3 +1,4 @@
+/**/
 {
   "compilerOptions": {
     "strict": true,
@@ -7,5 +8,20 @@
     "removeComments": true,
     "outFile": "./built/app.js"
   },
-  "files": [ "HelperFunctions.ts", "DialogRepresentation.ts", "DialogView.ts", "Application.ts" ]
+  "files": [ "HelperFunctions.ts", "DialogRepresentation.ts", "DialogPublicView.ts", "Application.ts" ]
 }
+/**/
+
+/*/ 
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": false,
+    "target": "es2020",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "outFile": "./built/internalApp.js"
+  },
+  "files": [ "HelperFunctions.ts", "DialogRepresentation.ts", "DialogPublicView.ts", "DialogInternalView.ts", "ApplicationInternal.ts" ]
+}
+/**/

@@ -12,12 +12,12 @@ window.addEventListener('DOMContentLoaded', (ev) => {
     );
     console.log(questions);
     let model: DialogGraph = new DialogGraph(questions);
-    let view : DialogPublicView = new DialogPublicView(model);
+    let view : DialogInternalView = new DialogInternalView(model);
 
-    placeEventListeners(view);
+    placeEventListenersInternal(view);
 });
 
-function placeEventListeners( view : DialogPublicView) {
+function placeEventListenersInternal( view : DialogPublicView) {
     getEl("moznostA").addEventListener("click", () => {
         let answer: string = getEl("moznostA").innerText;
         view.SetAnswer(answer, "moznostA");
