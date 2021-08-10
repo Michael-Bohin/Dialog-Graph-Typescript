@@ -17,31 +17,37 @@ window.addEventListener('DOMContentLoaded', (ev) => {
 });
 
 function placeEventListeners( view : DialogPublicView) {
-    getEl("moznostA").addEventListener("click", function () {
+    getEl("moznostA").addEventListener("click", () => {
         let answer: string = getEl("moznostA").innerText;
         view.SetAnswer(answer);
     });
 
-    getEl("moznostB").addEventListener("click", function () {
+    getEl("moznostB").addEventListener("click", () => {
         let answer: string = getEl("moznostB").innerText;
         view.SetAnswer(answer);
     });
 
-    getEl("enterInt").addEventListener("click", function () {
+    getEl("enterInt").addEventListener("click", () => {
         const inputElement = <HTMLInputElement> getEl("int");
         let answer: string = inputElement.value;
         view.SetAnswer( answer );
     });
 
-    getEl("enterEmail").addEventListener("click", function () {
+    getEl("enterEmail").addEventListener("click", () => {
         const inputElement = <HTMLInputElement>getEl("email");
-        let answer: string = inputElement.value;
-        view.SetAnswer(answer);
+        let email: string = inputElement.value;
+
+        const inputElementTel = <HTMLInputElement>getEl("tel");
+        let number: string = inputElementTel.value;
+        view.SetEmailAndTelephone( email, number );
     });
 
-    getEl("reverseAnswer").addEventListener("click", function () {
-        view.Reverse();
-    });
+    getEl("reverseAnswer").addEventListener("click", () => { view.Reverse(); });
 
+    getEl("email").addEventListener("input", () => { view.UpdateEmailValidation(); } );
+
+    getEl("tel").addEventListener("input", () => { view.UpdateTelValidation(); } );
+    //getEl("email").oninput = () => {  } ;
+    //getEl("tel").oninput = () => { view.ValidateTel("tel");
     // alse add button for reversing chatHistory here
 }
