@@ -1,16 +1,8 @@
 interface IInternalView extends IPublicView {
-    /*SetAnswer(answer: string, id: string) : void; // all except email and telephone (gets individual validation)
-    Reverse(): void;
-    UpdateEmailValidation(): void;
-    UpdateTelValidation(): void;
-    SetEmailAndTelephone(email:string, number:string): void;*/
-    // inherited ^^
     // extending with: 
     // 1. redraw always rerenders entire history with options to change 
     // 2:
     ChangeBtn(answer: string, questionName: string): void;
-    // returns true if questionName exists and answer is valid, otherwise returns false 
-
 }
 
 class DialogInternalView extends DialogPublicView implements IInternalView {
@@ -32,10 +24,10 @@ class DialogInternalView extends DialogPublicView implements IInternalView {
     }
 
     private CreateAnswerRow(question: Question) {
-        // create elements 
-        // add ids, inner texts, types and classes
-        // join tree
-        // append to DOM
+        // 1. create elements 
+        // 2. add ids, inner texts, types and classes
+        // 3. join tree
+        // 4. append to DOM
 
         let tableRow: HTMLElement = document.createElement("tr");
         let leftTableData: HTMLElement = document.createElement("td");
@@ -51,7 +43,6 @@ class DialogInternalView extends DialogPublicView implements IInternalView {
         changeBtn.innerText = "Zmenit";
         changeBtn.classList.add("btn", "yellow");
         
-
         rightTableData.appendChild(changeBtn);
         tableRow.appendChild(leftTableData);
         tableRow.appendChild(centerTableData);
@@ -68,12 +59,11 @@ class DialogInternalView extends DialogPublicView implements IInternalView {
             this.ViewHistory();
     }
 
-    changeLock: string = "";
     public ChangeBtn(questionName:string): void {
-        console.log("DialogInternalView.ChangeBtn reporting for duty with parameter: " + questionName);
+        // console.log("DialogInternalView.ChangeBtn reporting for duty with parameter: " + questionName);
         let result: string = window.prompt("What change to the answer would you like to save?");
 
-        console.log("User would to commit following change: " + result);
+        // console.log("User would to commit following change: " + result);
         if (this.dialogGraph.ValidInput(result, questionName)) {
             console.log("Change is valid and saved.");
             this.dialogGraph.UnsafeChangeAnswer(result, questionName);
@@ -93,7 +83,7 @@ class DialogInternalView extends DialogPublicView implements IInternalView {
                 this.CreateAnswerRow(q);
                 getEl(q.name).style.display = "table-row";
                 getEl(`odpoved-${q.name}`).innerText = this.dialogGraph.ChatHistoryAnswer(q.name);
-                console.log("Display summary: ", getEl("changeBtn-" + q.name));
+                // console.log("Display summary: ", getEl("changeBtn-" + q.name));
                 getEl("changeBtn-" + q.name).style.visibility = "hidden";
             }
     }

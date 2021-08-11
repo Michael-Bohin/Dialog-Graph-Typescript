@@ -12,7 +12,12 @@ window.addEventListener('DOMContentLoaded', (ev) => {
     );
     console.log(questions);
     let model: DialogGraph = new DialogGraph(questions);
-    let view : DialogPublicView = new DialogPublicView(model);
+    let view: DialogPublicView;
+    
+    if (publicView)
+        view = new DialogPublicView(model);
+    else
+        view = new DialogInternalView(model);
 
     placeEventListeners(view);
 });

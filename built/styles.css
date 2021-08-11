@@ -258,3 +258,8 @@ td.text-right {
     transform: translateX(10px) rotate(-45deg);
     transform-origin: left bottom;
 }
+
+/* Internal view styling */
+#tableHistory {
+    margin-top: 80px;
+}

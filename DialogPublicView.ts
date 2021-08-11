@@ -156,3 +156,5 @@ class DialogPublicView implements IPublicView {
         }, 3000 ); // wait 3000 milisecond before executing
     }
 }
+
+let publicView: boolean = true;

@@ -8,7 +8,7 @@
     "removeComments": true,
     "outFile": "./built/app.js"
   },
-  "files": [ "HelperFunctions.ts", "DialogRepresentation.ts", "DialogPublicView.ts", "Application.ts" ]
+  "files": [ "DialogRepresentation.ts", "DialogPublicView.ts", "DialogInternalView.ts", "Application.ts" ]
 }
 /**/
 
@@ -22,6 +22,6 @@
     "removeComments": true,
     "outFile": "./built/internalApp.js"
   },
-  "files": [ "HelperFunctions.ts", "DialogRepresentation.ts", "DialogPublicView.ts", "DialogInternalView.ts", "ApplicationInternal.ts" ]
+  "files": [ "HelperFunctions.ts", "DialogRepresentation.ts", "DialogPublicView.ts",  "ApplicationInternal.ts" ]
 }
 /**/
